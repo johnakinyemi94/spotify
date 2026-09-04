@@ -1,0 +1,42 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@spotify/web-api-ts-sdk": "^1.2.0",
+    "axios": "^1.20.0",
+    "dropzone": "^6.0.0-beta.2",
+    "flowbite": "^4.0.2",
+    "frame": "^1.0.0-alpha.2",
+    "framer-motion": "^13.1.1",
+    "lucide-react": "^1.39.0",
+    "mammoth": "^1.12.2",
+    "next": "16.3.3",
+    "next-auth": "^4.24.15",
+    "openai": "^7.8.0",
+    "pdfjs-dist": "^6.3.289",
+    "postcss": "^8.5.26",
+    "preline": "^4.2.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/next-auth": "^3.13.0",
+    "@types/node": "^20",
+    "@types/pdfjs-dist": "^2.10.377",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/spotify-api": "^0.0.26",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
