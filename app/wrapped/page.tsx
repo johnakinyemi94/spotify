@@ -179,23 +179,23 @@ export default async function Wrapped() {
             </div>
 
             <div className="flex justify-center sm:justify-start pt-4">
-              <a
+              <Link
                 href="/"
                 className="text-xs text-zinc-500 underline hover:text-white transition-colors"
               >
                 Log out / Refresh dashboard data
-              </a>
+              </Link>
             </div>
           </div>
         )}
 
-        <div className="w-full">
-          <RecommendationAssistant
-            tracks={
-              liveData ? [...liveData.likedTracks, ...liveData.topTracks] : []
-            }
-          />
-        </div>
+        {liveData && (
+          <div className="w-full">
+            <RecommendationAssistant
+              tracks={[...liveData.likedTracks, ...liveData.topTracks]}
+            />
+          </div>
+        )}
       </main>
     </div>
   );

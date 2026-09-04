@@ -1,8 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import { getLoginUrl } from "@/app/utils/spotify";
 
 export default function Home() {
+  const loginUrl = getLoginUrl();
+
   return (
     <div className="flex flex-col flex-1 items-center justify-center font-sans bg-linear-to-r from-green-800 via-black to-black">
       <Navbar />
@@ -25,12 +28,12 @@ export default function Home() {
               Also, get AI-generated song recommendations based on your taste.
             </p>
             <p className="font-semibold">
-              Click "Get My Wrapped" to see your personalized results!
+              Click &quot;Get My Wrapped&quot; to see your personalized results!
             </p>
           </div>
           <div className="flex flex-col font-medium">
             <Link
-              href={"/wrapped"}
+              href={loginUrl}
               className="flex bg-emerald-500 hover:bg-emerald-400 h-12 w-full items-center justify-center gap-2 rounded-full
               px-5 transition-colors font-bold text-black md:w-[158px]"
               rel="noopener noreferrer"

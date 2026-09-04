@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     const response = NextResponse.redirect(new URL("/wrapped", request.url));
 
     response.cookies.set("spotify_access_token", accessToken, {
-      maxAge: 60 * 5,
+      maxAge: tokenData.expires_in ?? 60 * 60,
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

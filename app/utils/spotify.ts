@@ -1,8 +1,16 @@
 const CLIENT_ID = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+
+function getRedirectUri() {
+  return (
+    process.env.NEXT_PUBLIC_REDIRECT_URI ??
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api/auth/callback`
+      : "http://localhost:3000/api/auth/callback")
+  );
+}
 
 export function getLoginUrl(): string {
-  if (!CLIENT_ID || !REDIRECT_URI) {
+  if (!CLIENT_ID) {
     console.error("Missing Spotify environment variables!");
     return "#";
   }
@@ -12,7 +20,7 @@ export function getLoginUrl(): string {
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
     response_type: "code",
-    redirect_uri: REDIRECT_URI,
+    redirect_uri: getRedirectUri(),
     scope: scopes.join(" "),
     show_dialog: "true", 
   });
@@ -23,7 +31,7 @@ export function getLoginUrl(): string {
 export async function getAccessToken(code: string) {
   const CLIENT_ID = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
   const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-  const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+  const redirectUri = getRedirectUri();
 
   const response = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
@@ -34,7 +42,7 @@ export async function getAccessToken(code: string) {
     body: new URLSearchParams({
       grant_type: "authorization_code",
       code,
-      redirect_uri: REDIRECT_URI!,
+      redirect_uri: redirectUri,
     }),
   });
 
