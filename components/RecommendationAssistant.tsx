@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import type { SpotifyTrack } from "@/app/types/spotify";
 
@@ -110,6 +111,14 @@ export default function RecommendationAssistant({ tracks }: { tracks: SpotifyTra
           <p className="whitespace-pre-line">{recommendations}</p>
         </div>
       )}
+      <div className="mt-5 border-t border-zinc-800 pt-4">
+        <Link
+          href="/"
+          className="text-xs text-zinc-500 underline transition-colors hover:text-white"
+        >
+          Log out / Refresh dashboard data
+        </Link>
+      </div>
     </section>
   );
 }
