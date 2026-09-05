@@ -1,11 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import type { SpotifyTrack } from "@/app/types/spotify";
+
+type RecommendedTrack = {
+  id: string;
+  name: string;
+  artist: string;
+  imageUrl?: string;
+};
 
 export default function RecommendationAssistant({ tracks }: { tracks: SpotifyTrack[] }) {
   const hasListeningHistory = tracks.length > 0;
   const [recommendations, setRecommendations] = useState("");
+  const [recommendedTracks, setRecommendedTracks] = useState<RecommendedTrack[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [preference, setPreference] = useState("");
@@ -18,6 +27,7 @@ export default function RecommendationAssistant({ tracks }: { tracks: SpotifyTra
 
     setIsLoading(true);
     setError("");
+    setRecommendedTracks([]);
 
     try {
       const response = await fetch("/api/recommendations", {
@@ -29,6 +39,7 @@ export default function RecommendationAssistant({ tracks }: { tracks: SpotifyTra
 
       if (!response.ok) throw new Error(data.error ?? "Request failed");
       setRecommendations(data.recommendations);
+      setRecommendedTracks(data.recommendedTracks ?? []);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "Request failed");
     } finally {
@@ -71,8 +82,32 @@ export default function RecommendationAssistant({ tracks }: { tracks: SpotifyTra
       </button>
       {error && <p className="mt-4 text-sm text-red-300">{error}</p>}
       {recommendations && (
-        <div className="mt-5 whitespace-pre-line border-t border-zinc-800 pt-5 text-zinc-200">
-          {recommendations}
+        <div className="mt-5 border-t border-zinc-800 pt-5 text-zinc-200">
+          {recommendedTracks.length > 0 && (
+            <ul className="mb-5 space-y-3">
+              {recommendedTracks.map((track) => (
+                <li key={track.id} className="flex items-center gap-3">
+                  {track.imageUrl ? (
+                    <Image
+                      src={`/api/spotify-image?url=${encodeURIComponent(track.imageUrl)}`}
+                      alt={track.name}
+                      width={44}
+                      height={44}
+                      unoptimized
+                      className="rounded"
+                    />
+                  ) : (
+                    <div className="h-11 w-11 rounded bg-zinc-800" aria-hidden="true" />
+                  )}
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{track.name}</p>
+                    <p className="truncate text-xs text-zinc-400">{track.artist}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="whitespace-pre-line">{recommendations}</p>
         </div>
       )}
     </section>
