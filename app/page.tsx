@@ -1,10 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
+import { headers } from "next/headers";
 import Navbar from "@/components/Navbar";
 import { getLoginUrl } from "@/app/utils/spotify";
 
-export default function Home() {
-  const loginUrl = getLoginUrl();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ spotify_error?: string }>;
+}) {
+  const requestHeaders = await headers();
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  const loginUrl = getLoginUrl(host ? `${protocol}://${host}` : undefined);
+  const { spotify_error: spotifyError } = await searchParams;
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center font-sans bg-linear-to-r from-green-800 via-black to-black">
@@ -23,6 +32,12 @@ export default function Home() {
             Spotify Wrapped
           </h1>
           <div className="card flex flex-col items-center text-center">
+            {spotifyError && (
+              <p className="max-w-md border border-red-400/50 bg-red-950/40 px-4 py-3 text-sm text-red-200">
+                Spotify authorization failed ({spotifyError}). Check the Vercel
+                environment variables and Spotify redirect URI.
+              </p>
+            )}
             <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-200 pb-4">
               Discover your top Spotify tracks and artists from the past year.
               Also, get AI-generated song recommendations based on your taste.

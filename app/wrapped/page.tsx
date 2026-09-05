@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { headers } from "next/headers";
 import type { WrappedData } from "@/app/types/spotify";
 import { getLoginUrl } from "@/app/utils/spotify";
 import RecommendationAssistant from "@/components/RecommendationAssistant";
@@ -55,7 +56,10 @@ export default async function Wrapped() {
     }
   }
 
-  const loginUrl = getLoginUrl();
+  const requestHeaders = await headers();
+  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host");
+  const loginUrl = getLoginUrl(host ? `${protocol}://${host}` : undefined);
 
   return (
     <div className="flex flex-col min-h-screen items-center justify-center font-sans bg-linear-to-r from-green-950 via-black to-black text-white">

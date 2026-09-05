@@ -1,16 +1,26 @@
 import { NextResponse } from "next/server";
-import { getAccessToken } from "@/app/utils/spotify";
+import { getAccessToken, getRedirectUri } from "@/app/utils/spotify";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");
+  const spotifyError = searchParams.get("error");
+
+  if (spotifyError) {
+    return NextResponse.redirect(
+      new URL(`/?spotify_error=${encodeURIComponent(spotifyError)}`, request.url),
+    );
+  }
 
   if (!code) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(
+      new URL("/?spotify_error=missing_authorization_code", request.url),
+    );
   }
 
   try {
-    const tokenData = await getAccessToken(code);
+    const callbackUri = getRedirectUri(new URL(request.url).origin);
+    const tokenData = await getAccessToken(code, callbackUri);
     const accessToken = tokenData.access_token;
     const response = NextResponse.redirect(new URL("/wrapped", request.url));
 
@@ -25,6 +35,8 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("Error during Spotify authentication callback:", error);
 
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(
+      new URL("/?spotify_error=token_exchange_failed", request.url),
+    );
   }
 }
