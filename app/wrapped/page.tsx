@@ -118,7 +118,7 @@ export default async function Wrapped() {
                         </span>
                         {track.album?.images?.[0]?.url && (
                           <Image
-                            src={track.album.images[0].url}
+                            src={`/api/spotify-image?url=${encodeURIComponent(track.album.images[0].url)}`}
                             alt={track.name}
                             width={44}
                             height={44}
@@ -158,7 +158,7 @@ export default async function Wrapped() {
                         </span>
                         {artist.images?.[0]?.url && (
                           <Image
-                            src={artist.images[0].url}
+                            src={`/api/spotify-image?url=${encodeURIComponent(artist.images[0].url)}`}
                             alt={artist.name}
                             width={44}
                             height={44}
