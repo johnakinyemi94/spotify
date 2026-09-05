@@ -122,6 +122,7 @@ export default async function Wrapped() {
                             alt={track.name}
                             width={44}
                             height={44}
+                            unoptimized
                             className="rounded"
                           />
                         )}
@@ -161,6 +162,7 @@ export default async function Wrapped() {
                             alt={artist.name}
                             width={44}
                             height={44}
+                            unoptimized
                             className="rounded-full object-cover aspect-square"
                           />
                         )}
